@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translator</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background: url("{{ url_for("static", filename="A.png") }}") no-repeat
+          center center fixed;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        text-align: center;
+        background-color: rgb(249, 223, 109);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .content h1 {
+        margin: 0;
+        font-size: 2.5em;
+        color: #000;
+      }
+
+      .content p {
+        margin: 10px 0 20px;
+        font-size: 1.2em;
+        color: #000;
+      }
+
+      .greetings {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+      }
+
+      .greeting {
+        text-align: center;
+      }
+
+      .greeting img {
+        width: 80px;
+        height: 100px;
+        border-radius: 5%;
+        padding: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .greeting span {
+        display: block;
+        margin-top: 10px;
+        font-size: 1em;
+        color: #000;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+      }
+
+      .button-container a {
+        text-decoration: none;
+      }
+
+      button {
+        background-color: #000;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #444;
+      }
+
+      /* Media queries for responsive background image */
+      @media (max-width: 768px) {
+        body,
+        html {
+          background-size: cover;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body,
+        html {
+          background: url("{{ url_for("static", filename="background.png") }}");
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="content">
+        <h1>Translator</h1>
+        <p>Translate easy and fast into 100+ languages</p>
+        <div class="greetings">
+          <div class="greeting">
+            <img
+              src="{{ url_for('static', filename='hola.png') }}"
+              alt="Hola"
+            />
+            <span>Hola</span>
+          </div>
+          <div class="greeting">
+            <img
+              src="{{ url_for('static', filename='hello.png') }}"
+              alt="Hello"
+            />
+            <span>Hello</span>
+          </div>
+          <div class="greeting">
+            <img
+              src="{{ url_for('static', filename='ciao.png') }}"
+              alt="Ciao"
+            />
+            <span>Ciao</span>
+          </div>
+        </div>
+        <div class="button-container">
+          <a href="page2.html"><button>Continue</button></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

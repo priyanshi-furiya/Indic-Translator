@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translator UI</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background: url("{{ url_for('static', filename='A.png') }}") no-repeat
+          center center fixed;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        text-align: center;
+        background-color: rgb(249, 223, 109);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+      .translator-container {
+        text-align: center;
+      }
+      .translator-box {
+        background-color: #fff;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .translator-box select,
+      .translator-box input {
+        width: 95%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        font-size: 1.2em;
+        border-radius: 5px;
+      }
+      .translator-box input {
+        background-color: #dad9d9;
+      }
+      .buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      .button {
+        flex: 1;
+        margin: 0 5px;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1em;
+        font-weight: bold;
+        text-decoration: none; /* Remove underline */
+      }
+      .write {
+        background-color: #d8bb28;
+        color: #000;
+      }
+      .record {
+        background-color: rgb(50, 50, 50);
+        color: #fff;
+      }
+      .scan {
+        background-color: #d8bb28;
+        color: #000;
+      }
+      button {
+        background-color: #000;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1em;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #444;
+      }
+      a {
+        text-decoration: none; /* Remove underline from all anchor elements */
+      }
+      @media (max-width: 768px) {
+        body,
+        html {
+          background-size: cover;
+        }
+      }
+      @media (max-width: 480px) {
+        body,
+        html {
+          background: url("{{ url_for('static', filename='background.png') }}");
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="translator-container">
+        <div class="translator-box">
+          <select>
+            <option>Italian</option>
+          </select>
+          <audio id="audioPlayback" controls></audio>
+        </div>
+        <div class="translator-box">
+          <select>
+            <option>English</option>
+          </select>
+          <input type="text" value="kitchen" readonly />
+        </div>
+        <div class="buttons">
+          <a href="page2.html" class="button write">Write</a>
+          <div class="button record" id="recordButton">Record</div>
+          <a href="page4.html" class="button scan">Scan</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      let isRecording = false;
+      let mediaRecorder;
+      let audioChunks = [];
+      let transcript = "";
+
+      const recordButton = document.getElementById("recordButton");
+      const audioPlayback = document.getElementById("audioPlayback");
+
+      recordButton.addEventListener("click", () => {
+        if (isRecording) {
+          mediaRecorder.stop();
+          recordButton.textContent = "Record";
+        } else {
+          navigator.mediaDevices
+            .getUserMedia({ audio: true })
+            .then((stream) => {
+              mediaRecorder = new MediaRecorder(stream);
+              mediaRecorder.start();
+
+              mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+              };
+
+              mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayback.src = audioUrl;
+                audioChunks = [];
+
+                const recognition = new (window.SpeechRecognition ||
+                  window.webkitSpeechRecognition)();
+                recognition.lang = "en-US";
+
+                recognition.onresult = (event) => {
+                  transcript = event.results[0][0].transcript;
+                  console.log("Recognized text:", transcript); // Existing log statement
+                  alert(transcript); // Single line to print the recognized text
+                };
+
+                const audioContext = new AudioContext();
+                const reader = new FileReader();
+                reader.readAsArrayBuffer(audioBlob);
+                reader.onloadend = () => {
+                  audioContext.decodeAudioData(reader.result, (buffer) => {
+                    const source = audioContext.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(audioContext.destination);
+                    source.start(0);
+                    recognition.start();
+                  });
+                };
+              };
+
+              recordButton.textContent = "Stop";
+            })
+            .catch((error) => {
+              console.error("Error accessing microphone", error);
+            });
+        }
+        isRecording = !isRecording;
+      });
+    </script>
+  </body>
+</html>
