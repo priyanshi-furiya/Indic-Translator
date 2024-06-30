@@ -13,6 +13,7 @@ function showTranslationStatus(message) {
       border: 1px solid #ccc;
       border-radius: 5px;
       z-index: 10000;
+      color: black;
     `;
     document.body.appendChild(statusDiv);
   }
@@ -37,11 +38,12 @@ function showTranslationResult(translation) {
     max-width: 80%;
     max-height: 80%;
     overflow: auto;
+    color: black;  /* Ensure text color is black */
   `;
   resultDiv.innerHTML = `
-    <h3>Translation:</h3>
-    <p>${translation}</p>
-    <button id="close-translation">Close</button>
+    <h3 style="color: black;">Translation:</h3>
+    <p style="color: black;">${translation}</p>
+    <button id="close-translation" style="color: black; background-color: #f0f0f0; border: 1px solid #ccc; padding: 5px 10px; cursor: pointer;">Close</button>
   `;
   document.body.appendChild(resultDiv);
 
