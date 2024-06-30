@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, jsonify
 import torch
 from IndicTransTokenizer import IndicProcessor
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 # Initialize model, tokenizer, and processor
 ip = IndicProcessor(inference=True)
 tokenizer = AutoTokenizer.from_pretrained("ai4bharat/indictrans2-indic-indic-dist-320M", trust_remote_code=True)
