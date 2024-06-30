@@ -17,6 +17,7 @@ Indic-Translator is a comprehensive translation tool designed to bridge linguist
 - `/static`: Static assets for the web application
 - `/templates`: HTML templates for the web interface
 - `app.py`: Main application file
+- `fairseq.ipynb` - fairseq implementation
 
 ## Installation and Usage
 
